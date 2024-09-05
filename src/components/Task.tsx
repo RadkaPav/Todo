@@ -2,15 +2,16 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Todo } from '../model'
 import { GiCheckMark } from "react-icons/gi";
 import { MdDeleteForever, MdModeEditOutline } from "react-icons/md";
+import { Draggable } from 'react-beautiful-dnd';
 
 interface Props {
+    index: number
     todo: Todo
     todos: Todo[]
     setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-
 }
 
-const Task = ({ todo, todos, setTodos }: Props) => {
+const Task = ({ index, todo, todos, setTodos }: Props) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [editTodo, setEditTodo] = useState<string>(todo.todo)
 
@@ -22,6 +23,7 @@ const Task = ({ todo, todos, setTodos }: Props) => {
 
     const handleDelete = (id: number) => {
         setTodos(todos.filter((todo) => todo.id !== id))
+
     }
 
     const handleEdit = (e: React.FormEvent, id: number) => {
@@ -37,31 +39,32 @@ const Task = ({ todo, todos, setTodos }: Props) => {
     }, [edit])
 
     return (
-        <form className='w-[90%] bg-orange-400 mt-1 mx-auto px-3 py-1 flex justify-between items-center rounded'
-            onSubmit={(e) => handleEdit(e, todo.id)} >
+        <Draggable draggableId={todo.id.toString()} index={index}>
             {
-                edit ? (
-                    <input className='outline-none w-8/12 pl-3' ref={inputRef} value={editTodo} onChange={(e) => setEditTodo(e.target.value)} />
-                ) : (
-                    <span>{todo.todo}</span>
+                (provided) => (
+                    <form className='w-[90%] bg-orange-400 my-1 mx-auto px-3 py-1 flex justify-between items-center rounded'
+                    onSubmit={(e) => handleEdit(e, todo.id)} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                        {
+                            edit ? 
+                                <input className='outline-none w-8/12 pl-3' ref={inputRef} value={editTodo} onChange={(e) => setEditTodo(e.target.value)} /> : <span>{todo.todo}</span>
+                        }
+                        <div className='flex'>
+                            <MdModeEditOutline
+                                className='text-2xl bg-white m-1 p-1'
+                                onClick={() => {
+                                    if (!edit && !todo.isDone) setEdit(!edit)
+                                }} />
+                            <GiCheckMark
+                                className='text-2xl bg-white m-1 p-1'
+                                onClick={() => handleDone(todo.id)} />
+                            <MdDeleteForever
+                                className='text-2xl bg-white m-1 p-1'
+                                onClick={() => handleDelete(todo.id)} />
+                        </div>
+                    </form>
                 )
             }
-
-            <div className='flex'>
-                <MdModeEditOutline
-                    className='text-2xl bg-white m-1 p-1'
-                    onClick={() => {
-                        if (!edit && !todo.isDone) setEdit(!edit)
-                    }} />
-                <GiCheckMark
-                    className='text-2xl bg-white m-1 p-1'
-                    onClick={() => handleDone(todo.id)} />
-                <MdDeleteForever
-                    className='text-2xl bg-white m-1 p-1'
-                    onClick={() => handleDelete(todo.id)} />
-
-            </div>
-        </form>
+        </Draggable>
     )
 }
 
