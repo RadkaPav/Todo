@@ -14,12 +14,12 @@ allTodos: Todo[]
 const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos }: Props) => {
   return (
 <div className='flex justify-evenly'>
-      <div className='mt-4 bg-teal-400 w-[40%] text-center py-1'>
-        <h3>Aktivní úkoly</h3>
+      <div className='w-[40%]'>
         <Droppable droppableId='TasksList'>
           {
-            (provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className=''>
+            (provided, snapshot) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className={`mt-4 text-center py-1 ${snapshot.isDraggingOver ? "bg-teal-700" : "bg-teal-400"}`}>
+                <h3>Aktivní úkoly</h3>
                 {activeTodos.map((todo, index) => (
                   <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
                 ))}
@@ -30,12 +30,12 @@ const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, co
         </Droppable>
       </div>
 
-      <div className='mt-4 bg-red-400 w-[40%] text-center py-1'>
-        <span>Splněné úkoly</span>
+      <div className='w-[40%]'>
         <Droppable droppableId='TasksRemove'>
           {
-            (provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
+            (provided, snapshot) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className={`mt-4  text-center py-1 ${snapshot.isDraggingOver ? "bg-red-600" : "bg-red-400"}`}>
+                <span>Splněné úkoly</span>
                 {completedTodos.map((todo, index) => (
                   <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
                 ))}

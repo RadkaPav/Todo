@@ -14,18 +14,18 @@ const App = () => {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
     if (todo) {
-      setAllTodos([...activeTodos, { id: Date.now(), todo, isDone: false }])
+      setAllTodos([...allTodos, { id: Date.now(), todo, isDone: false }])
       setTodo('')
     }
   }
 
-console.log(allTodos)
-
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result
+    console.log(result);
+    
     
     if (!destination) return
-    if (destination.droppableId === source.droppableId) return
+    if (destination.droppableId === source.droppableId && destination.index === source.index)  return
 
     let add
     let active = activeTodos
@@ -40,6 +40,7 @@ console.log(allTodos)
     }
 
     if (destination.droppableId === "TasksList") {
+      
       active.splice(destination.index, 0, add);
       add.isDone = false
     } else {
