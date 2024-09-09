@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TaskInput from './components/TaskInput';
-import TaskList from './components/TaskList';
+import TaskContainer from './TaskContainer';
 import { Todo } from './model';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 
 const App = () => {
@@ -59,11 +59,14 @@ useEffect(() => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="bg-blue-300 w-full">
+     
+      <div className="bg-blue-300 w-full" >
         <h1 className='text-3xl text my-5 text-center'>TODO</h1>
         <TaskInput todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-        <TaskList activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
+        <TaskContainer activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
       </div>
+
+   
     </DragDropContext>
   )
 }
