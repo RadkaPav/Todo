@@ -4,12 +4,14 @@ import { Todo } from '../model'
 import { Droppable } from 'react-beautiful-dnd'
 
 interface Props {
-  todos: Todo[]
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  activeTodos: Todo[]
+  setActiveTodos: React.Dispatch<React.SetStateAction<Todo[]>>
   completedTodos: Todo[]
   setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+allTodos: Todo[]
+  setAllTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
-const TaskList = ({ todos, setTodos, completedTodos, setCompletedTodos }: Props) => {
+const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos }: Props) => {
   return (
 <div className='flex justify-evenly'>
       <div className='mt-4 bg-teal-400 w-[40%] text-center py-1'>
@@ -18,8 +20,8 @@ const TaskList = ({ todos, setTodos, completedTodos, setCompletedTodos }: Props)
           {
             (provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className=''>
-                {todos.map((todo, index) => (
-                  <Task todo={todo} todos={todos} setTodos={setTodos} index={index} key={todo.id} />
+                {activeTodos.map((todo, index) => (
+                  <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
                 ))}
                 {provided.placeholder}
               </div>
@@ -35,7 +37,7 @@ const TaskList = ({ todos, setTodos, completedTodos, setCompletedTodos }: Props)
             (provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {completedTodos.map((todo, index) => (
-                  <Task todo={todo} todos={completedTodos} setTodos={setCompletedTodos} index={index} key={todo.id} />
+                  <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
                 ))}
                 {provided.placeholder}
               </div>

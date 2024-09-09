@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import { Todo } from './model';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
+
 const App = () => {
   const [todo, setTodo] = useState<string>('')
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [allTodos, setAllTodos] = useState<Todo[]>([])
+  const [activeTodos, setActiveTodos] = useState<Todo[]>([])
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([])
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
     if (todo) {
-      setTodos([...todos, { id: Date.now(), todo, isDone: false }])
+      setAllTodos([...activeTodos, { id: Date.now(), todo, isDone: false }])
       setTodo('')
     }
   }
 
+console.log(allTodos)
+
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result
-    console.log(result)
+    
     if (!destination) return
     if (destination.droppableId === source.droppableId) return
 
     let add
-    let active = todos
+    let active = activeTodos
     let complete = completedTodos
 
     if (source.droppableId === "TasksList") {
@@ -37,20 +41,27 @@ const App = () => {
 
     if (destination.droppableId === "TasksList") {
       active.splice(destination.index, 0, add);
+      add.isDone = false
     } else {
       complete.splice(destination.index, 0, add);
+      add.isDone = true
     }
-
+   
     setCompletedTodos(complete);
-    setTodos(active);
+    setActiveTodos(active);
   }
+
+useEffect(() => {
+  setActiveTodos(allTodos.filter((todo) => !todo.isDone))
+  setCompletedTodos(allTodos.filter((todo) => todo.isDone))
+}, [allTodos])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="bg-blue-300 w-full">
         <h1 className='text-3xl text my-5 text-center'>TODO</h1>
         <TaskInput todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-        <TaskList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
+        <TaskList activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos}/>
       </div>
     </DragDropContext>
   )
