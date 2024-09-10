@@ -1,3 +1,6 @@
+# Popis projektu
+Cílem bylo naučit se použít React.js v kombinaci s Typescriptem. V projektu jsem se také naučila používat knihovnu Beautiful dnd.
+
 # Screenshots
 
 ![Snímek obrazovky 2024-09-10 133806](https://github.com/user-attachments/assets/f60475c0-6301-44aa-8a22-bfad650960dc)
