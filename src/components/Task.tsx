@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Todo } from '../model'
-import { GiCheckMark } from "react-icons/gi";
-import { MdDeleteForever, MdModeEditOutline } from "react-icons/md";
-import { Draggable } from 'react-beautiful-dnd';
+import { GiCheckMark } from "react-icons/gi"
+import { MdDeleteForever, MdModeEditOutline } from "react-icons/md"
+import { Draggable } from 'react-beautiful-dnd'
 
 interface Props {
     index: number
@@ -43,7 +43,7 @@ const Task = ({ index, todo, activeTodos: activeTodos, setActiveTodos: setActive
         <Draggable draggableId={todo.id.toString()} index={index}>
             {
                 (provided) => (
-                    <form className='w-[90%] bg-orange-400 my-1 mx-auto px-3 py-1 flex justify-between items-center rounded'
+                    <form className='w-[90%] bg-gray-200 my-1 mx-auto px-3 py-1 flex justify-between items-center rounded'
                         onSubmit={(e) => handleEdit(e, todo.id)} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
                         {
                             edit ?
@@ -51,15 +51,15 @@ const Task = ({ index, todo, activeTodos: activeTodos, setActiveTodos: setActive
                         }
                         <div className='flex'>
                             <MdModeEditOutline
-                                className='text-2xl bg-white m-1 p-1'
+                                className='text-2xl bg-white border-2 border-gray-400 rounded m-1 p-1'
                                 onClick={() => {
                                     if (!edit && !todo.isDone) setEdit(!edit)
                                 }} />
                             <GiCheckMark
-                                className={`text-2xl m-1 p-1 ${todo.isDone ? "bg-green-600" : "bg-white"}`}
+                                className={`text-2xl m-1 p-1 border-2 border-gray-400 rounded ${todo.isDone ? "bg-green-600" : "bg-white"}`}
                                 onClick={() => handleDone(todo.id)} />
                             <MdDeleteForever
-                                className='text-2xl bg-white m-1 p-1'
+                                className='text-2xl bg-white border-2 border-gray-400 rounded m-1 p-1'
                                 onClick={() => handleDelete(todo.id)} />
                         </div>
                     </form>
@@ -68,6 +68,5 @@ const Task = ({ index, todo, activeTodos: activeTodos, setActiveTodos: setActive
         </Draggable>
     )
 }
-
 
 export default Task

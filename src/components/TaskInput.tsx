@@ -10,7 +10,7 @@ const TaskInput = ({ todo, setTodo, handleAdd}: Props) => {
     return (
         <form className='relative w-[90%] mx-auto' onSubmit={handleAdd}>
             <input
-                placeholder='Enter a task'
+                placeholder='Zadej úkol'
                 className='w-[100%] py-2 px-4 rounded-full outline-none'
                 value={todo}
                 onChange={e => setTodo(e.target.value)} />

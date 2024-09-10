@@ -1,6 +1,6 @@
 import React from 'react'
-import TaskList from './components/TaskList'
-import { Todo } from './model'
+import TaskList from './TaskList'
+import { Todo } from '../model'
 
 interface Props {
     activeTodos: Todo[]
@@ -13,10 +13,10 @@ interface Props {
 
 const TaskContainer = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos }: Props) => {
     return (
-        <>
+        <div className='flex flex-col md:flex-row justify-evenly'>
             <TaskList activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos} title="Aktivní úkoly" data={activeTodos} />
             <TaskList activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos} title="Splněné úkoly" data={completedTodos} />
-        </>
+        </div>
     )
 }
 

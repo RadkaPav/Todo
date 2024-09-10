@@ -15,19 +15,17 @@ interface Props {
 }
 const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos, title, data }: Props) => {
   return (
-    <div className='flex justify-evenly'>
-
-      <div className='w-[40%]'>
+    <div className='w-full md:w-[40%]'>
         <Droppable droppableId={`${data === activeTodos ? "TasksList" : "TasksRemove"}`}>
           {
             (provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps}
-                className={`mt-4 text-center py-1 
+                className={`mt-4 mx-2 text-center pt-1 pb-4 rounded
                 ${data === activeTodos ?
                     snapshot.isDraggingOver ? "bg-teal-700" : "bg-teal-400" :
                     snapshot.isDraggingOver ? "bg-red-600" : "bg-red-400"
                   }`}>
-                <h3>{title}</h3>
+                <h3 className='text-lg'>{title}</h3>
                 {data.map((todo, index) => (
                   <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos} />
                 ))}
@@ -37,10 +35,7 @@ const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, co
           }
         </Droppable>
       </div>
-
-    </div>
   )
-
 }
 
 export default TaskList
