@@ -2,7 +2,7 @@
 **Cíl:** Ovládnutí TypeScriptu a React.js v kombinaci s knihovnou React Beautiful DND. \
 **Výsledek:** Funkční aplikace s intuitivním rozhraním pro správu úkolů, která umožňuje uživateli přidávat nové úkoly, upravovat existující, označovat je jako splněné a přesouvat mezi různými stavy (aktivní/splněné).\
 \
-Aplikace není dokončená, stále na ní pracuji.
+Aktuálně pracuji na napojení na Firebase.
 
 # Screenshots
 
