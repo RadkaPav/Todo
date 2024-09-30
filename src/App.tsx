@@ -3,6 +3,8 @@ import TaskInput from './components/TaskInput'
 import TaskContainer from './components/TaskContainer'
 import { Todo } from './model'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { projectFirestore } from './firebase/config'
+import { Toaster, toast } from 'react-hot-toast'
 
 const App = () => {
   const [todo, setTodo] = useState<string>('')
@@ -10,43 +12,49 @@ const App = () => {
   const [activeTodos, setActiveTodos] = useState<Todo[]>([])
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([])
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault()
     if (todo) {
-      setAllTodos([...allTodos, { id: Date.now(), todo, isDone: false }])
+      try {
+        await projectFirestore.collection('todos').add({ todo, isDone: false })
+      } catch (err) {
+        toast.error('Úkol nebyl přidán')
+      }
       setTodo('')
     }
   }
 
   const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result
- 
+    const { source, destination, draggableId } = result
+
     if (!destination) return
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
-    let add
-    let active = activeTodos
-    let complete = completedTodos
-
-    if (source.droppableId === "TasksList") {
-      add = active[source.index]
-      active.splice(source.index, 1)
-    } else {
-      add = complete[source.index]
-      complete.splice(source.index, 1)
+    if (source.droppableId === 'TasksList') {
+      projectFirestore.collection('todos').doc(draggableId).update({ isDone: true })
     }
-
-    if (destination.droppableId === "TasksList") {
-      active.splice(destination.index, 0, add)
-      add.isDone = false
-    } else {
-      complete.splice(destination.index, 0, add)
-      add.isDone = true
+    if (source.droppableId === 'TasksRemove') {
+      projectFirestore.collection('todos').doc(draggableId).update({ isDone: false })
     }
-
-    setCompletedTodos(complete)
-    setActiveTodos(active)
   }
+
+  useEffect(() => {
+    const unsubscribe = projectFirestore.collection('todos').onSnapshot((snapshot) => {
+      if (snapshot.empty) {
+        toast.error('Žádné úkoly k vypsání')
+        setAllTodos([])
+      } else {
+        let result: Todo[] = []
+        snapshot.docs.forEach(oneTodo => {
+          const { todo, isDone } = oneTodo.data()
+          result.push({ todo, isDone, id: oneTodo.id })
+        })
+        setAllTodos(result)
+      }
+    }, err => toast.error(err.message))
+
+    return () => unsubscribe()
+  }, [])
 
   useEffect(() => {
     setActiveTodos(allTodos.filter((todo) => !todo.isDone))
@@ -54,13 +62,17 @@ const App = () => {
   }, [allTodos])
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="bg-blue-200 w-full" >
-        <h1 className='text-3xl text my-5 text-center'>SEZNAM ÚKOLŮ</h1>
-        <TaskInput todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-        <TaskContainer activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos} />
-      </div>
-    </DragDropContext>
+    <div>
+      <Toaster position="top-center" reverseOrder={false} />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className='bg-blue-200 w-full' >
+          <h1 className='text-3xl text my-5 text-center'>SEZNAM ÚKOLŮ</h1>
+          <TaskInput todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+          <TaskContainer activeTodos={activeTodos} completedTodos={completedTodos} />
+        </div>
+      </DragDropContext>
+    </div>
+
   )
 }
 

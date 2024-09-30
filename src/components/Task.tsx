@@ -3,33 +3,32 @@ import { Todo } from '../model'
 import { GiCheckMark } from "react-icons/gi"
 import { MdDeleteForever, MdModeEditOutline } from "react-icons/md"
 import { Draggable } from 'react-beautiful-dnd'
+import { projectFirestore } from '../firebase/config'
 
 interface Props {
     index: number
     todo: Todo
-    activeTodos: Todo[]
-    setActiveTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-    completedTodos: Todo[]
-    setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-    allTodos: Todo[]
-    setAllTodos: React.Dispatch<React.SetStateAction<Todo[]>>
 }
 
-const Task = ({ index, todo, activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos }: Props) => {
+const Task = ({ index, todo }: Props) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [editTodo, setEditTodo] = useState<string>(todo.todo)
 
-    const handleDone = (id: number) => {
-        setAllTodos(allTodos.map(todo => todo.id === id ? { ...todo, isDone: !todo.isDone } : todo))
+    const handleDone = (id: string) => {
+        if (todo.isDone) {
+            projectFirestore.collection('todos').doc(id).update({isDone: false})
+        } else {
+            projectFirestore.collection('todos').doc(id).update({isDone: true})
+        }
     }
 
-    const handleDelete = (id: number) => {
-        setAllTodos(allTodos.filter((todo) => todo.id !== id))
+    const handleDelete = (id: string) => {
+        projectFirestore.collection("todos").doc(id).delete()
     }
 
-    const handleEdit = (e: React.FormEvent, id: number) => {
+    const handleEdit = (e: React.FormEvent, id: string) => {
         e.preventDefault()
-        setAllTodos(allTodos.map((todo) => todo.id === id ? { ...todo, todo: editTodo } : todo))
+        projectFirestore.collection('todos').doc(id).update({todo: editTodo})
         setEdit(false)
     }
 

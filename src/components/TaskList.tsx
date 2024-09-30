@@ -1,19 +1,14 @@
-import React from 'react'
 import Task from './Task'
 import { Todo } from '../model'
 import { Droppable } from 'react-beautiful-dnd'
 
 interface Props {
   activeTodos: Todo[]
-  setActiveTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-  completedTodos: Todo[]
-  setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>
-  allTodos: Todo[]
-  setAllTodos: React.Dispatch<React.SetStateAction<Todo[]>>
   title: string
   data: Todo[]
 }
-const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, completedTodos, setCompletedTodos, allTodos, setAllTodos, title, data }: Props) => {
+const TaskList = ({ activeTodos, title, data }: Props) => {
+
   return (
     <div className='w-full md:w-[40%]'>
         <Droppable droppableId={`${data === activeTodos ? "TasksList" : "TasksRemove"}`}>
@@ -27,7 +22,7 @@ const TaskList = ({ activeTodos: activeTodos, setActiveTodos: setActiveTodos, co
                   }`}>
                 <h3 className='text-lg'>{title}</h3>
                 {data.map((todo, index) => (
-                  <Task todo={todo} activeTodos={activeTodos} setActiveTodos={setActiveTodos} index={index} key={todo.id} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} allTodos={allTodos} setAllTodos={setAllTodos} />
+                  <Task todo={todo} index={index} key={todo.id} />
                 ))}
                 {provided.placeholder}
               </div>
