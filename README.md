@@ -1,3 +1,16 @@
+# Popis projektu
+**Cíl:** Ovládnutí TypeScriptu a React.js v kombinaci s knihovnou React Beautiful DND. \
+**Výsledek:** Funkční aplikace s intuitivním rozhraním pro správu úkolů, která umožňuje uživateli přidávat nové úkoly, upravovat existující, označovat je jako splněné a přesouvat mezi různými stavy (aktivní/splněné).\
+\
+Aktuálně pracuji na napojení na Firebase.
+
+# Screenshots
+
+![Snímek obrazovky 2024-09-10 133806](https://github.com/user-attachments/assets/f60475c0-6301-44aa-8a22-bfad650960dc)
+![Snímek obrazovky 2024-09-10 133840](https://github.com/user-attachments/assets/ea84cf69-c797-4f66-acde-e8f4ad5266f7)
+![Snímek obrazovky 2024-09-10 133901](https://github.com/user-attachments/assets/2daf6625-81d8-4ad6-8d9f-389b62c0819d)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
